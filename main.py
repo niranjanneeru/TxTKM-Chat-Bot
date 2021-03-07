@@ -1,3 +1,5 @@
+import configparser
+
 from telegram.ext import (Updater, CommandHandler, CallbackQueryHandler, MessageHandler, Filters, PollAnswerHandler)
 
 from database.db import Db
@@ -8,7 +10,12 @@ from modules.handlers import callback_query_handler, message_handler, poll_answe
 from modules.questionnaire import cancel
 
 if __name__ == '__main__':
-    updater = Updater('TOKEN', use_context=True,
+
+    config = configparser.ConfigParser()
+    config.read('secrets.ini')
+    token = config['TELEGRAM']['token']
+
+    updater = Updater(token, use_context=True,
                       request_kwargs={'read_timeout': 6, 'connect_timeout': 7})
     dp = updater.dispatcher
 

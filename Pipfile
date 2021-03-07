@@ -8,6 +8,7 @@ verify_ssl = true
 [packages]
 python-telegram-bot = "*"
 pyrebase4 = "*"
+configparser = "*"
 
 [requires]
 python_version = "3.8"

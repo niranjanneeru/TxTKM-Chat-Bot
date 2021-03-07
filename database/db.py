@@ -1,3 +1,5 @@
+from configparser import ConfigParser
+
 import pyrebase
 
 from data import black_list, active_chats
@@ -8,8 +10,17 @@ class Db:
     __instance = None
     __db: pyrebase.pyrebase.Database = None
 
-
     def __init__(self):
+        config = ConfigParser()
+        config.read('secrets.ini')
+        self.firebaseConfig = dict(apiKey=config['FIREBASE']['apiKey'],
+                                   authDomain=config['FIREBASE']['authDomain'],
+                                   databaseURL=config['FIREBASE']['databaseURL'],
+                                   projectId=config['FIREBASE']['projectId'],
+                                   storageBucket=config['FIREBASE']['storageBucket'],
+                                   messagingSenderId=config['FIREBASE']['messagingSenderId'],
+                                   appId=config['FIREBASE']['appId'],
+                                   measurementId=config['FIREBASE']['measurementId'])
         self.__db = pyrebase.initialize_app(self.firebaseConfig).database()
 
     @staticmethod

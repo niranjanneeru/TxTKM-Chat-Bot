@@ -76,12 +76,12 @@ def help_menu(update: Update, context: CallbackContext) -> None:
 
 
 def status_code(chat_id: int):
-    if Db.get_instance().read_user_data(chat_id):
-        return -1
     if data.active_chats.get(chat_id, None):
         return 1
     if data.active_requests.get(chat_id, None):
         return 0
+    if Db.get_instance().read_user_data(chat_id):
+        return -1
 
 
 def status(update: Update, context: CallbackContext):

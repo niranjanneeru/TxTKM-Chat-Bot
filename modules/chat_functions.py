@@ -38,9 +38,10 @@ def set_up_random_chat(update: Update, context: CallbackContext):
         if user and user.date == 1:
             df = Db.get_instance().read_available_users(chat_id, user.date)
             if len(df) == 0:
-                context.bot.send_message(text=f'``` Oops! No Users Available try after some time ```',
-                                         parse_mode=ParseMode.MARKDOWN,
-                                         chat_id=update.callback_query.message.chat.id, )
+                context.bot.send_message(
+                    text=f'``` Oops! No Users Available try after some time or Switch to Date Track```',
+                    parse_mode=ParseMode.MARKDOWN,
+                    chat_id=update.callback_query.message.chat.id, )
             else:
                 user = sample(df, 1)[0]
                 request = Request()
@@ -66,9 +67,11 @@ def set_up_random_chat(update: Update, context: CallbackContext):
         elif user and user.date == -1:
             df = Db.get_instance().read_users_with_gender(user)
             if len(df) == 0:
-                context.bot.send_message(text=f'``` Oops! No Users Available for Dating try after some time ```',
-                                         parse_mode=ParseMode.MARKDOWN,
-                                         chat_id=update.callback_query.message.chat.id, )
+                context.bot.send_message(
+                    text=f'``` Oops! No Users Available for Dating try after some time or Switch to Make Friends '
+                         f'Track```',
+                    parse_mode=ParseMode.MARKDOWN,
+                    chat_id=update.callback_query.message.chat.id, )
             else:
                 user = sample(df, 1)[0]
                 request = Request()

@@ -68,8 +68,8 @@ def set_up_random_chat(update: Update, context: CallbackContext):
             df = Db.get_instance().read_users_with_gender(user)
             if len(df) == 0:
                 context.bot.send_message(
-                    text=f'``` Oops! No Users Available for Dating try after some time or Switch to Make Friends '
-                         f'Track```',
+                    text=f'``` Oops! No Users Available for Dating with current preferences try after some time or '
+                         f'Switch to Make Friends Track```',
                     parse_mode=ParseMode.MARKDOWN,
                     chat_id=update.callback_query.message.chat.id, )
             else:
@@ -120,18 +120,21 @@ def accept_request_to_chat(update: Update, context: CallbackContext):
         data.active_commands[tel_1] = context.bot.send_message(text=f'``` Anonymous User Accepted the Request ```',
                                                                parse_mode=ParseMode.MARKDOWN,
                                                                chat_id=tel_1).message_id
-        res = Db.get_instance().get_common_interests(tel_1, tel_2)
-        val = [utils.INTEREST_LIST[x] for x in res[0].intersection(res[1])]
-        if len(val) != 0:
-            context.bot.send_message(tel_1, f'``` Common Interest {" ".join(val)} ```', ParseMode.MARKDOWN)
-            context.bot.send_message(tel_2, f'``` Common Interest {" ".join(val)} ```', ParseMode.MARKDOWN)
-        else:
-            context.bot.send_message(tel_1,
-                                     f'``` Interests the Anonymous User have:-  {" ".join([utils.INTEREST_LIST[i] for i in res[1]])}```',
-                                     ParseMode.MARKDOWN)
-            context.bot.send_message(tel_2,
-                                     f'``` Interests the Anonymous User have:-  {" ".join([utils.INTEREST_LIST[i] for i in res[0]])}```',
-                                     ParseMode.MARKDOWN)
+        try:
+            res = Db.get_instance().get_common_interests(tel_1, tel_2)
+            val = [utils.INTEREST_LIST[x] for x in res[0].intersection(res[1])]
+            if len(val) != 0:
+                context.bot.send_message(tel_1, f'``` Common Interest {" ".join(val)} ```', ParseMode.MARKDOWN)
+                context.bot.send_message(tel_2, f'``` Common Interest {" ".join(val)} ```', ParseMode.MARKDOWN)
+            else:
+                context.bot.send_message(tel_1,
+                                         f'``` Interests the Anonymous User have:-  {" ".join([utils.INTEREST_LIST[i] for i in res[1]])}```',
+                                         ParseMode.MARKDOWN)
+                context.bot.send_message(tel_2,
+                                         f'``` Interests the Anonymous User have:-  {" ".join([utils.INTEREST_LIST[i] for i in res[0]])}```',
+                                         ParseMode.MARKDOWN)
+        except Exception:
+            pass
     else:
         data.delete_msg(update.callback_query.message.chat_id, context)
         data.active_commands[update.callback_query.message.chat_id] = context.bot.send_message(

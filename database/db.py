@@ -116,7 +116,9 @@ class Db:
     def get_interests(self, chat_id):
         data = self.__db.child('users').child(chat_id).child('skills').get()
         data = data.val()
-        res = set(data)
+        res = None
+        if data:
+            res = set(data)
         return res
 
     def get_common_interests(self, user_1, user_2):
